@@ -12,7 +12,7 @@ _usage = "Usage: mac.py -m <mac address> -k <api key>"
 def get_data(api_key, mac):
     headers = {"X-Authentication-Token": api_key, }
 
-    api_url = "https://api.macaddress.io/v1?output=json&search=" + mac
+    api_url = "https://api.macaddress.io/v1?output=vendor&search=" + mac
     request_data = requests.get(api_url, headers=headers)
     # convert error codes to friendly error messages
     if request_data.status_code != 200:
@@ -31,7 +31,7 @@ def get_data(api_key, mac):
         else:
             print("An error occurred while calling the API")
         sys.exit()
-    return request_data.json()
+    return request_data.text
 
 
 def main(argv):
@@ -62,10 +62,7 @@ def main(argv):
         sys.exit(2)
 
     data = get_data(api_key, mac)
-    if data['vendorDetails']['isPrivate']:
-        print("Company name is private.")
-    else:
-        print(data['vendorDetails']['companyName'])
+    print(data)
 
 
 if __name__ == "__main__":
